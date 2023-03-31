@@ -1,0 +1,30 @@
+{
+  "name": "agronow",
+  "version": "1.0.0",
+  "description": "don't get stuck in the middle",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notpsychic1/AgroNOW.git"
+  },
+  "author": "Karan S",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/notpsychic1/AgroNOW/issues"
+  },
+  "homepage": "https://github.com/notpsychic1/AgroNOW#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "http": "^0.0.1-security",
+    "mysql": "^2.18.1",
+    "punycode": "^2.3.0"
+  }
+}
