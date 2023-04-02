@@ -7,7 +7,7 @@ insert into users(user_email,user_pass,category) VALUES
 ('abc@xyz.com','7c0186c5c75fc3b4434a31302f44c22ea222ae35e34dcd26a1b19ee16dcc1a51',0),
 ('jainam.purushotam@btech.christuniversity.in','7e9439014fdad34f49b054f383d382bba9806b9228064bc0b1b8d956eceb6911',1),
 ('def@abc.xyz','d9ede7c2ece01b059ec3af2f8b47836a6feda626cf0a76e49c6c9be2b151456d',0),
-('jainampatel999@gmail.com','e5857b335afdf35ca81a110bc81f38682f8a89892cc597f5398dfef82d42b513',1),
+('jainampatel999@gmail.com','e5857b335afdf35ca81a110bc81f38682f8a89892cc597f5398dfef82d42b513',1);
 
 create table userprofile(user_id int primary key,user_email varchar(20),foreign key(user_email)references users(user_email),firstname varchar(50) not null,lastname varchar(50) not null,phone_no bigint(10) not null,address varchar(100) not null,city varchar(20) not null,state varchar(20) not null,pincode int(6) not null);
 
