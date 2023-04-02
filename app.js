@@ -40,6 +40,10 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/account', function(req, res) {
+    res.sendFile(__dirname + '/farmer-account.html');
+});
+
 app.get('/register', function(req, res) {
     res.sendFile(__dirname + '/register.html');
 });
