@@ -12,7 +12,7 @@ const{encode}=require('punycode');
 
 var crypto=require('crypto');
 
-
+app.set('view engine', 'ejs');
 
 let encodeUrl=parseUrl.urlencoded({extended:false});
 
@@ -38,10 +38,6 @@ var con=mysql.createConnection({
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/account', function(req, res) {
-    res.sendFile(__dirname + '/farmer-account.html');
 });
 
 app.get('/register', function(req, res) {
@@ -174,7 +170,7 @@ app.post("/login",encodeUrl,(req,res)=>{
         if(Object.keys(result).length>0){
             userPage();
         }else{
-            res.sendFile(__dirname+'/failLog.html');
+            res.sendFile(__dirname + '/my-account.html');
         }
         });
     });
@@ -197,16 +193,26 @@ app.get('/logout',  function (req, res, next)  {
 //app.listen(3000,function(){
 //  console.log('Shopping cart app listening on port 3000!');
 //});
-app.listen(4000,()=>{
-    console.log("Server running on port 4000");
-});
+
 
 app.get("/contact",(req,res)=>{
     res.sendFile(__dirname+"/contact-us.html");
 });
 
+app.use(express.static(__dirname));
+
+app.set('views',__dirname);
+
 app.get("/shop",(req,res)=>{
-    res.sendFile(__dirname+"/shop.html");
+    con.query('SELECT * FROM stock',function(err,rows){
+        if (err) {
+              console.error('Error fetching data from MySQL:', err);
+              res.status(500).send('Error fetching data from MySQL');
+              return;
+            }
+        res.render("shop",{data:rows});
+    });
+    //res.sendFile(__dirname+"/shop.html");
 });
 
 app.get("/about",(req,res)=>{
@@ -219,6 +225,10 @@ app.get("/cart",(req,res)=>{
 
 app.get("/checkout",(req,res)=>{
     res.sendFile(__dirname+"/checkout.html");
+});
+
+app.listen(4000,()=>{
+    console.log("Server running on port 4000");
 });
 
 // app.post("/contact",(req,res)=>{
