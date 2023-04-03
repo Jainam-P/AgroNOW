@@ -158,18 +158,22 @@
                           <div class="type-lb">
                             <p class="sale">Sale</p>
                           </div>
-                          <img src="data[i]:image/jpeg;base64,${data[i].img.toString('base64')}" class="img-fluid" alt="Image">
+                          <img src="/shop/<%= data[i].item_id %>" class="img-fluid" alt="Image">
                           <div class="mask-icon">
                             <ul>
                               <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                               <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                               <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                             </ul>
-                            <a class="cart" href="#">Add to Cart</a>
+                            <!--<form class="cart" action="/cart" method="GET">
+                              <input type="hidden" name="value" value="<%= data[i].item_id %>">
+                              <button type="submit">Submit</button>
+                            </form>-->
+                            <a class="cart" href="/cart?value=<%= data[i].item_id %>">Add to Cart</a>
                           </div>
                         </div>
                         <div class="why-text">
-                          <h4><%= data[i].item_name%></h4>
+                          <h4><%=data[i].item_name%></h4>
                           <h5>Rs. <%= data[i].rate%></h5>
                         </div>
                       </div>
