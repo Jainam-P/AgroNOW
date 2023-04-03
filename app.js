@@ -82,8 +82,7 @@ app.post('/register',encodeUrl,(req,res)=>{
             function userPage(){
                 // We create a session for the dashboard (user page) page and save the user data to this session:
                 req.session.user={
-                    email:email,
-                    password:password 
+                    username:email
                 };
 
                 res.sendFile(// <!DOCTYPE html>
@@ -113,7 +112,7 @@ app.post('/register',encodeUrl,(req,res)=>{
                         userPage();
                     };
                 });
-        }
+            }
         });
     });
 });
@@ -141,8 +140,6 @@ app.post("/login",encodeUrl,(req,res)=>{
           function userPage(){
             // We create a session for the dashboard (user page) page and save the user data to this session:
             req.session.user={
-                firstname:result[0].firstname,
-                lastname:result[0].lastname,
                 username:userName,
                 password:password 
             };
@@ -212,7 +209,17 @@ app.get("/shop",(req,res)=>{
             }
         res.render("shop",{data:rows});
     });
-    //res.sendFile(__dirname+"/shop.html");
+    //res.sendFile(__dirname+"/shop.ejs");
+});
+app.get("/shop/:id",(req,res)=>{
+  const id=req.params.id;
+  const query=`SELECT img FROM stock WHERE item_id=${id}`;
+  con.query(query,(error,results)=>{
+    if(error) throw error;
+    const imageData=results[0].img;
+    res.contentType("image/jpeg");
+    res.send(imageData);
+  });
 });
 
 app.get("/about",(req,res)=>{
@@ -220,7 +227,29 @@ app.get("/about",(req,res)=>{
 });
 
 app.get("/cart",(req,res)=>{
-    res.sendFile(__dirname+"/cart.html");
+    const itemid=req.query.value;
+    const eml=req.session.user;
+    con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+                    if (error){
+                        res.sendFile(__dirname+"/signin.html");
+                    }else{
+                        var uid=result[0].user_id;
+                        con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+                            if(Object.keys(res).length>0){
+                                con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+                                    res.sendFile(__dirname+"/cart.html");
+                                });
+                            }else{
+                                con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
+                                    res.sendFile(__dirname+"/cart.html");
+                                });
+                            }
+                        });
+                        
+                    };
+                });
+    
+    
 });
 
 app.get("/checkout",(req,res)=>{
