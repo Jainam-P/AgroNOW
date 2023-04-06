@@ -74,7 +74,6 @@
             <li class="dropdown">
               <a href="/shop" class="nav-link dropdown-toggle arrow">SHOP</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -90,7 +89,7 @@
               </a>
             </li>
             <li>
-              <a href="/signin">Sign In</a>
+              <a href="/signin" onclick="signIn()" id="sign-in">Sign In</a>
             </li>
           </ul>
         </div>
@@ -182,14 +181,26 @@
   </div>
   <!-- End Categories -->
 
-  <!-- Start copyright  -->
-  <div class="footer-copyright">
-    <p class="footer-company">All Rights Reserved. &copy; 2023 <a href="#">AgroNOW</a><a href="https://html.design/"></a>
-    </p>
-  </div>
-  <!-- End copyright  -->
-
   <!-- ALL JS FILES -->
+  <script>
+    function signIn() {
+      var button = document.getElementById('sign-in');
+      fetch('/signin').then(res => res.text()).then(err => {
+        console.log(err);
+      });
+      button.textContent = 'Logout';
+      button.onclick = signOut;
+    }
+
+    function signOut() {
+      // Perform sign-out logic here
+
+      // Update the button text and function
+      var button = document.getElementById('sign-in');
+      button.textContent = 'Sign In';
+      button.onclick = signIn;
+    }
+  </script>
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
