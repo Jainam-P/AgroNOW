@@ -58,7 +58,6 @@
             <li class="dropdown">
               <a href="/shop" class="nav-link dropdown-toggle arrow active">SHOP</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -70,7 +69,7 @@
               <a href="/cart">
                 <i class="fa fa-shopping-bag"></i>
                 <span class="badge">3</span>
-                <p>My Cart</p>
+                <p class="active">My Cart</p>
               </a>
             </li>
             <li>
@@ -139,19 +138,19 @@
                     </a>
                   </td>
                   <td class="name-pr">
-                    <a href="#">
+                    <a href="#" class="remove">
                       Carrots
                     </a>
                   </td>
                   <td class="price-pr">
-                    <p>₹ 80.0</p>
+                    <p class="remove">₹ 80.0</p>
                   </td>
                   <td class="quantity-box"><input type="number" size="4" value="1" min="0" step="1" class="c-input-text qty text"></td>
                   <td class="total-pr">
-                    <p>₹ 80.0</p>
+                    <p class="remove">₹ 80.0</p>
                   </td>
                   <td class="remove-pr">
-                    <a href="#">
+                    <a href="#" onclick="remove()">
                       <i class="fas fa-times"></i>
                     </a>
                   </td>
@@ -165,12 +164,6 @@
       <div class="row my-5">
         <div class="col-lg-6 col-sm-6">
           <div class="coupon-box">
-            <div class="input-group input-group-sm">
-              <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
-              <div class="input-group-append">
-                <button class="btn btn-theme" type="button">Apply Coupon</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -211,18 +204,20 @@
         </div>
         <div class="col-lg-12 d-flex shopping-box"><a href="/checkout" class="ml-auto btn hvr-hover">Checkout</a> </div>
       </div>
-
+      <br>
+      <br>
     </div>
   </div>
   <!-- End Cart -->
-  <!-- Start copyright  -->
-  <div class="footer-copyright">
-    <p class="footer-company">All Rights Reserved. &copy; 2023 <a href="#">AgroNOW</a>
-    </p>
-  </div>
-  <!-- End copyright  -->
+
 
   <!-- ALL JS FILES -->
+  <script>
+    function remove() {
+      var button = document.getElementById('remove');
+      button.textContent = '';
+    }
+  </script>
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
