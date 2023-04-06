@@ -56,9 +56,8 @@
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
             <li class="dropdown active">
-              <a href="shop.html" class="nav-link dropdown-toggle arrow">SHOP</a>
+              <a href="/shop" class="nav-link dropdown-toggle arrow">SHOP</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -67,13 +66,13 @@
         <div class="attr-nav">
           <ul>
             <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
-            <li class="side-menu"><a href="cart.html">
+            <li class="side-menu"><a href="/cart">
                 <i class="fa fa-shopping-bag"></i>
                 <span class="badge">3</span>
                 <p>My Cart</p>
               </a></li>
             <li>
-              <a href="signin.html">Sign In</a>
+              <a href="/signin" onclick="signIn()" id="sign-in">Sign In</a>
             </li>
           </ul>
         </div>
@@ -123,24 +122,37 @@
               <div class="mt-3 mb-4">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" class="rounded-circle img-fluid" style="width: 100px;" />
               </div>
-              <h4 class="mb-2">ABC</h4>
-              <p class="text-muted mb-4">@Farmer <span class="mx-2">|</span> <a href="#!">farmer@fresh.com</a></p>
-              <button type="button" class="btn btn-primary btn-rounded btn-lg">
-                Call now
-              </button>
+              <name class="mb-2">
+              </name>
+              <p class="text-muted mb-4">@Farmer<span class="mx-2">|</span>
+                <email></email>
+              </p>
+              <form action="/list-prod" method="GET">
+                <button type="submit" class="btn btn-primary btn-rounded btn-lg">
+                  List Products
+                </button>
+              </form>
+              <br>
+              <form action="#" method="GET">
+                <button type="submit" class="btn btn-primary btn-rounded btn-lg">
+                  Listed Products
+                </button>
+              </form>
               <div class="d-flex justify-content-between text-center mt-5 mb-2">
                 <div>
-                  <p class="mb-2 h5">1, A Road, 20 Main</p>
+                  <address class="mb-2 h5"></address>
                   <p class="text-muted mb-0">Address</p>
                 </div>
                 <div class="px-3">
-                  <p class="mb-2 h5">Bengaluru</p>
+                  <city class="mb-2 h5"></city>
                   <p class="text-muted mb-0">City</p>
                 </div>
                 <div>
-                  <p class="mb-2 h5">560074</p>
+                  <pincode class="mb-2 h5"></pincode>
                   <p class="text-muted mb-0">Pin Code</p>
                 </div>
+              </div>
+              <div>
               </div>
             </div>
           </div>
@@ -151,6 +163,35 @@
   </div>
 
   <!-- ALL JS FILES -->
+  <script>
+    fetch('/profile').then(res => res.json()).then(html => {
+      document.querySelector('name').innerHTML = html.firstname;
+      console.log(html);
+      document.querySelector('email').innerHTML = html.user_email;
+      document.querySelector('city').innerHTML = html.city;
+      document.querySelector('address').innerHTML = html.address;
+      document.querySelector('pincode').innerHTML = html.pincode;
+    });
+  </script>
+  <!-- <script>
+    function signIn() {
+      var button = document.getElementById('sign-in');
+      fetch()
+      button.textContent = 'Logout';
+      button.onclick = signOut;
+    }
+
+    function signOut() {
+      // Perform sign-out logic here
+      fetch('/logout').then(res => res.text()).then(err => {
+        console.log(err);
+      });
+      // Update the button text and function
+      var button = document.getElementById('sign-in');
+      button.textContent = 'Sign In';
+      button.onclick = signIn;
+    }
+  </script> -->
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
