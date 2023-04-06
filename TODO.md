@@ -1,0 +1,7 @@
+- [ ] Add products (Backend)
+- [ ] Orders - Customer and Farmer (Frontend and backend)
+- [ ] Add to cart (Backend)
+- [ ] Checkout (Backend)
+- [ ] Payment Gateway
+- [ ] Signout 
+- [ ] Kannada translate (Later)
