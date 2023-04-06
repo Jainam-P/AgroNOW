@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!-- saved from url=(0051)https://getbootstrap.com/docs/5.3/examples/sign-in/ -->
 <html lang="en">
@@ -34,7 +33,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <style data-merge-styles="true"></style>
   <style data-merge-styles="true"></style>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,6 +72,7 @@
       top: 95%;
       width: 100%;
     }
+
     .bd-placeholder-img {
       font-size: 1.125rem;
       text-anchor: middle;
@@ -176,7 +176,22 @@
     </div>
   </div>
 </editor-card>
+<script>
+  function signIn() {
+    var button = document.getElementById('sign-in');
+    button.textContent = 'Logout';
+    button.onclick = signOut;
+  }
 
+  function signOut() {
+    // Perform sign-out logic here
+
+    // Update the button text and function
+    var button = document.getElementById('sign-in');
+    button.textContent = 'Sign In';
+    button.onclick = signIn;
+  }
+</script>
 <!-- <script>
   const loginForm = document.getElementById("login-form");
   const loginButton = document.getElementById("login-form-submit");
