@@ -269,7 +269,7 @@ app.get("/contact",(req,res)=>{
 
 app.use(express.static(__dirname));
 
-app.set('views',__dirname);
+// app.set('views',__dirname);
 
 app.get("/shop",(req,res)=>{
     con.query('SELECT * FROM stock',function(err,rows){
