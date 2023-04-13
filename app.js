@@ -299,7 +299,32 @@ app.get("/about",(req,res)=>{
 });
 
 app.get("/cart",(req,res)=>{
-    res.sendFile(__dirname+"/cart.html");
+    const itemid=req.query.value;
+    const eml=req.session.user;
+  // Find the product in your database based on the productId
+  
+
+    con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+                    if (error){
+                        // res.sendFile(__dirname+"/signin.html");
+                        console.log("Error")
+                    }else{
+                        var uid=result[0].user_id;
+                        con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+                            if(Object.keys(res).length>0){
+                                con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+                                });
+                            }else{
+                                con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
+                                    
+                                });
+                            }
+                        });
+                        res.render('cart');
+                }
+            });
+   
+   
 });
 
 app.get("/checkout",(req,res)=>{
