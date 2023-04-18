@@ -419,11 +419,19 @@ app.post('/add', (req, res) => {
 
 /* Kannada pages*/
 app.get("/kn", function(req, res) {
-    res.sendFile(__dirname+"/public/kn/index-kn.html");
+    if(req.session.user){
+        res.render('index-kn', { sgdata: "ಲಾಗ್ ಔಟ್"});
+    } else {
+        res.render('index-kn', { sgdata: "ಸೈನ್ ಇನ್"});
+    }
 });
 
 app.get("/about-kn",(req,res)=>{
-    res.sendFile(__dirname+"/public/kn/about-kn.html");
+    if(req.session.user){
+        res.render('about-kn', { sgdata: "ಲಾಗ್ ಔಟ್"});
+    } else {
+        res.render('about-kn', { sgdata: "ಸೈನ್ ಇನ್"});
+    }
 });
 
 app.get("/farmer-account-kn",(req,res)=>{
