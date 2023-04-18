@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Site Metas -->
+  <title>AgroNOW</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Site Icons -->
+  <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Responsive CSS -->
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/custom.css">
+
+  <!--[if lt IE 9]>
+      <script src="assets/https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="assets/https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+  <!-- Start Main Top -->
+  <header class="main-header">
+    <!-- Start Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+      <div class="container">
+        <!-- Start Header Navigation -->
+        <div class="navbar-header">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="index.html"><img src="#" alt=""></a>
+        </div>
+        <!-- End Header Navigation -->
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+            <li class="nav-item"><a class="nav-link" href="/kn">ಹೋಂ</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about-kn">ನಮ್ಮ ಬಗ್ಗೆ</a></li>
+            <li class="dropdown active">
+              <a href="/shop-kn" class="nav-link dropdown-toggle arrow">ಅಂಗಡಿ</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+
+        <!-- Start Atribute Navigation -->
+        <div class="attr-nav">
+          <ul>
+            <li class="side-menu">
+              <a href="/cart-kn">
+                <i class="fa fa-shopping-bag"></i>
+                <span class="badge"></span>
+                <p>ಕಾರ್ಟ್</p>
+              </a>
+            </li>
+            <li>
+              <% if(sgdata === "ಲಾಗ್ ಔಟ್") { %>
+              <a href="/logout-kn" id="sign-in"><%= sgdata %></a>
+              <% } else { %>
+              <a href="/signin-kn" id="sign-in">ಸೈನ್ ಇನ್</a>
+              <% } %>
+            </li>
+            <li>
+              <a href="/customer-account-en">ಇಂಗ್ಲೀಷ್ ನಲ್ಲಿ ವೀಕ್ಷಿಸಿ</a>
+            </li>
+          </ul>
+        </div>
+        <!-- End Atribute Navigation -->
+      </div>
+    </nav>
+    <!-- End Navigation -->
+  </header>
+  <!-- End Main Top -->
+
+  <!-- Start Top Search -->
+  <div class="top-search">
+    <div class="container">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input type="text" class="form-control" placeholder="Search">
+        <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+      </div>
+    </div>
+  </div>
+  <!-- End Top Search -->
+
+  <!-- Start All Title Box -->
+  <div class="all-title-box">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h2>ಚೆಕ್ಔಟ್</h2>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">ಅಂಗಡಿ</a></li>
+            <li class="breadcrumb-item active">ಚೆಕ್ಔಟ್</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End All Title Box -->
+
+  <!-- Start Cart  -->
+  <div class="cart-box-main">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-lg-6 mb-3">
+          <div class="checkout-address">
+            <div class="title-left">
+              <h3>ತಲುಪಿಸುವ ವಿಳಾಸ</h3>
+            </div>
+            <form class="needs-validation" novalidate>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName">ಮೊದಲ ಹೆಸರು*</label>
+                  <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                  <div class="invalid-feedback"> ಮಾನ್ಯವಾದ ಮೊದಲ ಹೆಸರು ಅಗತ್ಯವಿದೆ. </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="lastName">ಕೊನೆಯ ಹೆಸರು*</label>
+                  <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                  <div class="invalid-feedback"> ಮಾನ್ಯ ಕೊನೆಯ ಹೆಸರು ಅಗತ್ಯವಿದೆ.</div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="username">ಉಸೆರ್ನಮೆ*</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="username" placeholder="" required>
+                  <div class="invalid-feedback" style="width: 100%;"> ನಿಮ್ಮ ಬಳಕೆದಾರಹೆಸರು ಅಗತ್ಯವಿದೆ. </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="email">ಇಮೇಲ್ ಅಡ್ರೆಸ್*</label>
+                <input type="email" class="form-control" id="email" placeholder="">
+                <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+              </div>
+              <div class="mb-3">
+                <label for="address">ವಿಳಾಸ 1*</label>
+                <input type="text" class="form-control" id="address" placeholder="" required>
+                <div class="invalid-feedback"> ದಯವಿಟ್ಟು ನಿಮ್ಮ ಶಿಪ್ಪಿಂಗ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ. </div>
+              </div>
+              <div class="mb-3">
+                <label for="address2">ವಿಳಾಸ 2*</label>
+                <input type="text" class="form-control" id="address2" placeholder="">
+              </div>
+              <div class="row">
+                <!-- <div class="col-md-5 mb-3">
+                  <label for="country">Country *</label>
+                  <select class="wide w-100" id="country">
+                    <option value="Choose..." data-display="Select">Choose...</option>
+                    <option value="United States">United States</option>
+                  </select>
+                  <div class="invalid-feedback"> Please select a valid country. </div>
+                </div> -->
+                <div class="col-md-4 mb-3">
+                  <label for="state">ರಾಜ್ಯ*</label>
+                  <select class="wide w-100" id="state">
+                    <option data-display="Select">ಆಯ್ಕೆ ಮಾಡಿ...</option>
+                    <option>ಕರ್ನಾಟಕ</option>
+                    <option>ತಮಿಳುನಾಡು</option>
+                    <option>ಗೋವಾ</option>
+                    <option>ಆಂಧ್ರಪ್ರದೇಶ</option>
+                    <option>ತೆಲಂಗಾಣ</option>
+                    <option>ಕೇರಳ</option>
+                  </select>
+                  <div class="invalid-feedback"> ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಸ್ಥಿತಿಯನ್ನು ಒದಗಿಸಿ. </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="zip">ಪಿನ್ ಕೋಡ್*</label>
+                  <input type="text" class="form-control" id="zip" placeholder="" required>
+                  <div class="invalid-feedback"> ಪಿನ್ ಕೋಡ್ ಕಡ್ಡಾಯವಾಗಿದೆ. </div>
+                </div>
+              </div>
+              <!-- <hr class="mb-4"> -->
+              <!-- <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="same-address">
+                <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+              </div> -->
+              <!-- <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="save-info">
+                <label class="custom-control-label" for="save-info">Save this information for next time</label>
+              </div> -->
+              <hr class="mb-4">
+              <div class="title"> <span></span>ಪೇಮೆಂಟ್</div>
+              <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                  <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                  <label class="custom-control-label" for="credit">ವಿತರಣೆಯಲ್ಲಿ ಪೆ ಮಾಡಿ </label>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="cc-name">Name on card</label>
+                  <input type="text" class="form-control" id="cc-name" placeholder="" required> <small class="text-muted">Full name as displayed on card</small>
+                  <div class="invalid-feedback"> Name on card is required </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="cc-number">Credit card number</label>
+                  <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                  <div class="invalid-feedback"> Credit card number is required </div>
+                </div>
+              </div> -->
+              <!-- <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label for="cc-expiration">Expiration</label>
+                  <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                  <div class="invalid-feedback"> Expiration date required </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="cc-expiration">CVV</label>
+                  <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                  <div class="invalid-feedback"> Security code required </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="payment-icon">
+                    <ul>
+                      <li><img class="img-fluid" src="assets/images/payment-icon/1.png" alt=""></li>
+                      <li><img class="img-fluid" src="assets/images/payment-icon/2.png" alt=""></li>
+                      <li><img class="img-fluid" src="assets/images/payment-icon/3.png" alt=""></li>
+                      <li><img class="img-fluid" src="assets/images/payment-icon/5.png" alt=""></li>
+                      <li><img class="img-fluid" src="assets/images/payment-icon/7.png" alt=""></li>
+                    </ul>
+                  </div>
+                </div>
+              </div> -->
+              <hr class="mb-1">
+            </form>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-6 mb-3">
+          <div class="row">
+            <div class="col-md-12 col-lg-12">
+              <div class="shipping-method-box">
+                <div class="title-left">
+                  <h3>ಸಾಗಣಿಕೆ ರೀತಿ</h3>
+                </div>
+                <div class="mb-4">
+                  <div class="custom-control custom-radio">
+                    <input id="shippingOption1" name="shipping-option" class="custom-control-input" checked="checked" type="radio">
+                    <label class="custom-control-label" for="shippingOption1"></label>ಪ್ರಮಾಣಿತ ವಿತರಣೆ<span class="float-right font-weight-bold">FREE</span>
+                  </div>
+                  <div class="ml-4 mb-2 small">(3-7 business days)</div>
+                  <div class="custom-control custom-radio">
+                    <input id="shippingOption2" name="shipping-option" class="custom-control-input" type="radio">
+                    <label class="custom-control-label" for="shippingOption2"></label>ಶೀಘ್ರ ವಿತರಣೆ<span class="float-right font-weight-bold">₹10.00</span>
+                  </div>
+                  <div class="ml-4 mb-2 small">(2-4 business days)</div>
+                  <!-- <div class="custom-control custom-radio">
+                    <input id="shippingOption3" name="shipping-option" class="custom-control-input" type="radio">
+                    <label class="custom-control-label" for="shippingOption3">Next Business day</label> <span class="float-right font-weight-bold">₹20.00</span>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-12">
+              <div class="odr-box">
+                <div class="title-left">
+                  <h3>ಶೀಘ್ರ ವಿತರಣೆ</h3>
+                </div>
+                <div class="rounded p-2 bg-light">
+                  <div class="media mb-2 border-bottom">
+                    <div class="media-body"> <a href="detail.html"> Lorem ipsum dolor sit amet</a>
+                      <div class="small text-muted">Price: ₹80.00 <span class="mx-2">|</span> Qty: 1 <span class="mx-2">|</span> Subtotal: ₹80.00</div>
+                    </div>
+                  </div>
+                  <div class="media mb-2 border-bottom">
+                    <div class="media-body"> <a href="detail.html"> Lorem ipsum dolor sit amet</a>
+                      <div class="small text-muted">Price: ₹60.00 <span class="mx-2">|</span> Qty: 1 <span class="mx-2">|</span> Subtotal: ₹60.00</div>
+                    </div>
+                  </div>
+                  <div class="media mb-2">
+                    <div class="media-body"> <a href="detail.html"> Lorem ipsum dolor sit amet</a>
+                      <div class="small text-muted">Price: ₹40.00 <span class="mx-2">|</span> Qty: 1 <span class="mx-2">|</span> Subtotal: ₹40.00</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-12">
+              <div class="order-box">
+                <div class="title-left">
+                  <h3>ನಿಮ್ಮ ಆರ್ಡರ್ </h3>
+                </div>
+                <div class="d-flex">
+                  <div class="font-weight-bold">ಪ್ರಾಡಕ್ಟ್</div>
+                  <div class="ml-auto font-weight-bold">ಟೋಟಲ್</div>
+                </div>
+                <hr class="my-1">
+                <div class="d-flex">
+                  <h4>ಸಬ್ ಟೋಟಲ್</h4>
+                  <div class="ml-auto font-weight-bold"> </div>
+                </div>
+                <div class="d-flex">
+                  <h4>ಡಿಸ್ಕೌಂಟ್</h4>
+                  <div class="ml-auto font-weight-bold"> ₹ </div>
+                </div>
+                <hr class="my-1">
+                <div class="d-flex">
+                  <h4>ಕೂಪನ್ ಡಿಸ್ಕೌಂಟ್ </h4>
+                  <div class="ml-auto font-weight-bold"> ₹ </div>
+                </div>
+                <div class="d-flex">
+                  <h4>ಟ್ಯಾಕ್ಸ್</h4>
+                  <div class="ml-auto font-weight-bold"> ₹ </div>
+                </div>
+                <div class="d-flex">
+                  <h4>ಡೆಲಿವರಿ ಫಿ </h4>
+                  <div class="ml-auto font-weight-bold"> ₹ </div>
+                </div>
+                <hr>
+                <div class="d-flex gr-total">
+                  <h5>ಗ್ರ್ಯಾಂಡ್ ಟೋಟಲ್</h5>
+                  <div class="ml-auto h5"> ₹ </div>
+                </div>
+                <hr>
+              </div>
+            </div>
+            <div class="col-12 d-flex shopping-box"> <a href="checkout.html" class="ml-auto btn hvr-hover">ಆರ್ಡರ್ ಪ್ಲೇಸ್ ಮಾಡಿ </a> </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- End Cart -->
+
+
+  <!-- ALL JS FILES -->
+  <script src="assets/js/jquery-3.2.1.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <!-- ALL PLUGINS -->
+  <script src="assets/js/jquery.superslides.min.js"></script>
+  <script src="assets/js/bootstrap-select.js"></script>
+  <script src="assets/js/inewsticker.js"></script>
+  <script src="assets/js/bootsnav.js."></script>
+  <script src="assets/js/images-loded.min.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl.carousel.min.js"></script>
+  <script src="assets/js/baguetteBox.min.js"></script>
+  <script src="assets/js/form-validator.min.js"></script>
+  <script src="assets/js/contact-form-script.js"></script>
+  <script src="assets/js/custom.js"></script>
+</body>
+
+</html>
