@@ -74,8 +74,13 @@
               </a>
             </li>
             <li>
-              <a href="/signin-en">Sign In</a>
+              <% if(sgdata === "Log out") { %>
+              <a href="/logout-en" id="sign-in"><%= sgdata %></a>
+              <% } else { %>
+              <a href="/signin-en" id="sign-in"><%= sgdata %></a>
+              <% } %>
             </li>
+            <li>
             <li>
               <a href="/shop-kn">View in Kannada</a>
             </li>

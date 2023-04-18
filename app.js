@@ -50,11 +50,19 @@ var con=mysql.createConnection({
 
 /* English pages */
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/en/index-en.html');
+    if(req.session.user){
+        res.render('index-en', { sgdata: "Log out"});
+    } else {
+        res.render('index-en', { sgdata: "Sign In"});
+    }
 });
 
 app.get("/about-en",(req,res)=>{
-    res.sendFile(__dirname+"/public/en/about-en.html");
+    if(req.session.user){
+        res.render('about-en', { sgdata: "Log out"});
+    } else {
+        res.render('about-en', { sgdata: "Sign In"});
+    }
 });
 
 app.get("/customer-account-en",(req,res)=>{
@@ -74,8 +82,9 @@ app.get("/farmer-account-en",(req,res)=>{
 });
 
 app.get("/signin-en",(req,res)=>{
-    res.sendFile(__dirname+"/public/en/signin-en.html");
-    
+    if(!(req.session.user)){
+        res.render('signin-en');
+    }
 });
 
 app.get("/shop-en",(req,res)=>{
@@ -85,7 +94,12 @@ app.get("/shop-en",(req,res)=>{
               res.status(500).send('Error fetching data from MySQL');
               return;
             }
-        res.render('shop-en',{data:rows});
+        if(req.session.user){
+            res.render('shop-en',{sgdata:"Log out", data:rows});
+        } else {
+            res.render('shop-en',{sgdata:"Sign In", data:rows});
+        }
+        
     });
     //res.sendFile(__dirname+"/shop.ejs");
 });
@@ -351,6 +365,8 @@ app.post('/add', (req, res) => {
     const productId = req.body.value;
     console.log(productId);
     // Find the product in your database based on the productId
+    cartItems.push(productId);
+    
     con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
       // console.log(results[0]['rate']);
       const json = JSON.stringify(results[0]);
