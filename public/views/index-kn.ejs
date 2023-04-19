@@ -93,10 +93,14 @@
               </a>
             </li>
             <li>
-              <a href="/signin-kn" onclick="signIn()" id="sign-in">ಸೈನ್ ಇನ್</a>
+              <% if(sgdata === "ಲಾಗ್ ಔಟ್") { %>
+              <a href="/logout-kn" id="sign-in"><%= sgdata %></a>
+              <% } else { %>
+              <a href="/signin-kn" id="sign-in"><%= sgdata %></a>
+              <% } %>
             </li>
             <li>
-              <a href="/">ಇಂಗ್ಲೀಷ್ ನಲ್ಲಿ ವೀಕ್ಷಿಸಿ</a>
+              <a href="/">View in English</a>
             </li>
           </ul>
         </div>

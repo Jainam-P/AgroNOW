@@ -171,6 +171,10 @@ app.get("/cart-en",(req,res)=>{
    
 });
 
+app.get("/failReg-en", function(req, res) {
+    res.render('failReg-en', { sgdata: "Sign In" });
+});
+
 app.get("/list-prod-en", function (req, res) {
     if(req.session.user){
         if(req.session.user.category === 1){
@@ -460,7 +464,7 @@ app.get("/signin-kn",(req,res)=>{
             res.redirect("/farmer-account-kn");
         }
     } else {
-        res.sendFile(__dirname+"/public/kn/signin-kn.html");
+        res.render('signin-kn');
     }
 });
 
@@ -477,7 +481,7 @@ app.get("/shop-kn",(req,res)=>{
 });
 
 app.get('/register-kn', function(req, res) {
-    res.sendFile(__dirname + '/public/kn/register-kn.html');
+    res.render('register-kn');
 });
 
 app.get("/profile-kn", function (req, res){
@@ -543,6 +547,10 @@ app.get("/cart-kn",(req,res)=>{
                 });
    
    
+});
+
+app.get("/failReg-kn", function(req, res) {
+    res.render('failReg-kn', { sgdata: "ಸೈನ್ ಇನ್" });
 });
 
 app.get("/list-prod-kn", function (req, res) {

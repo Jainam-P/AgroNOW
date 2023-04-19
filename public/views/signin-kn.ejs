@@ -138,7 +138,7 @@
       <img class="mb-4" src="assets/images/desc-icons/house.png" alt="" width="80" height="80">
       <h1 class="h3 mb-3 fw-normal">ವೆಲ್ಕಮ್ ಬ್ಯಾಕ್ !</h1>
       <br>
-      <a href="/signin-en">ಇಂಗ್ಲೀಷ್ ನಲ್ಲಿ ವೀಕ್ಷಿಸಿ</a>
+      <a href="/signin-en">View in English</a>
       <br>
       <br>
       <div class="form-floating">
@@ -180,22 +180,6 @@
     </div>
   </div>
 </editor-card>
-<script>
-  function signIn() {
-    var button = document.getElementById('sign-in');
-    button.textContent = 'Logout';
-    button.onclick = signOut;
-  }
-
-  function signOut() {
-    // Perform sign-out logic here
-
-    // Update the button text and function
-    var button = document.getElementById('sign-in');
-    button.textContent = 'Sign In';
-    button.onclick = signIn;
-  }
-</script>
 <!-- <script>
   const loginForm = document.getElementById("login-form");
   const loginButton = document.getElementById("login-form-submit");
