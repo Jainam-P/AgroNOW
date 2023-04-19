@@ -56,9 +56,7 @@
           <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/about-en">About Us</a></li>
-            <li class="dropdown active">
-              <a href="/shop-en" class="nav-link dropdown-toggle arrow active">SHOP</a>
-            </li>
+            <a href="/shop-en" class="nav-link active">SHOP</a>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -98,9 +96,9 @@
   <div>
     <% if(data.length){ for(var i=0; i< data.length; i++) {%>
 
-    <ul class="list-group list-group-horizontal">
+    <ul class="list-group list-group-horizontal justify-content-center">
       <li class="list-group-item">
-        Order ID: <%= data[i].order_id %>
+        Order ID: <strong><%= data[i].order_id %></strong>
       </li>
       <li class="list-group-item">
         DOD: <%= data[i].DOD %>
