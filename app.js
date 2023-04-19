@@ -193,6 +193,7 @@ app.get("/get-cart-en", function(req, res) {
     }
 });
 
+
 app.get("/failReg-en", function(req, res) {
     res.render('failReg-en', { sgdata: "Sign In" });
 });
@@ -220,11 +221,44 @@ app.get("/remove/:id", function(req, res){
 });
 
 app.get("/checkout-en",(req,res)=>{
-    if(req.session.user){
-        res.render('checkout-en', {sgdata: "Log out"})
+    const eml=req.session.user;
+
+    if(req.session.user) {
+        con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+            var uid=result[0].user_id;
+        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}';`,function(err,rows){
+            if(err){
+                  console.error('Error fetching data from MySQL:',err);
+                  res.status(500).send('Error fetching data from MySQL');
+                  return;
+                }
+                    res.render('checkout-en',{sgdata: "Log out", data2:rows});
+           
+        });
+       });
     } else {
-        res.redirect("/signin-en")
+        res.redirect('/signin-en');
     }
+});
+
+app.get("/orders-en",(req,res)=>{
+    const eml = req.session.user;
+
+    if(eml){
+        tempquery = `SELECT * FROM orders, userprofile where orders.user_id = userprofile.user_id and userprofile.user_email = '${eml.username}';`
+        con.query(tempquery,function(err,rows){
+        if (err) {
+              console.error('Error fetching data from MySQL:', err);
+              res.status(500).send('Error fetching data from MySQL');
+              return;
+            }
+        res.render('orders-en',{sgdata:"Log out", data:rows});
+    });
+    } else {
+        res.redirect("/signin-en");
+    }
+    
+    //res.sendFile(__dirname+"/shop.ejs");
 });
 
 
