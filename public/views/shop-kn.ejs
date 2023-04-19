@@ -66,14 +66,18 @@
         <div class="attr-nav">
           <ul>
             <li class="side-menu">
-              <a href="/cart-kn">
+              <a href="/get-cart-kn">
                 <i class="fa fa-shopping-bag"></i>
                 <span class="badge"></span>
                 <p>ಕಾರ್ಟ್</p>
               </a>
             </li>
             <li>
-              <a href="/signin-kn" onclick="signIn()" id="sign-in">ಸೈನ್ ಇನ್</a>
+              <% if(sgdata === "Log out") { %>
+              <a href="/logout-en" id="sign-in"><%= sgdata %></a>
+              <% } else { %>
+              <a href="/signin-en" id="sign-in"><%= sgdata %></a>
+              <% } %>
             </li>
             <li>
               <a href="/shop-en">View in English</a>

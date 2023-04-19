@@ -1,4 +1,3 @@
-//const alert=require('alert');
 const express=require('express');
 const cookieParser=require("cookie-parser");
 const sessions=require('express-session');
@@ -9,7 +8,6 @@ const ejs=require('ejs');
 app.use(express.static("public"));
 const translate = require('google-translate-api');
 const targetLanguage = 'en';
-
 
 
 var mysql=require('mysql');
@@ -95,9 +93,9 @@ app.get("/shop-en",(req,res)=>{
               return;
             }
         if(req.session.user){
-            res.render('shop-en',{sgdata:"Log out", data:rows});
+            res.render('shop-en',{sgdata:"Log out", productId: -1, data:rows});
         } else {
-            res.render('shop-en',{sgdata:"Sign In", data:rows});
+            res.render('shop-en',{sgdata:"Sign In", productId: -1, data:rows});
         }
         
     });
@@ -125,50 +123,74 @@ app.get("/profile-en", function (req, res){
     
 });
 
-app.get("/cart-en",(req,res)=>{
+app.get("/add-cart-en",(req,res)=>{
+
     const itemid=req.query.value;
     const eml=req.session.user;
     const productId = req.body.value;
   console.log(productId);
   // Find the product in your database based on the productId
-  
-
+  if(req.session.user){
     con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
-                    // if (error){
-                    //     // res.sendFile(__dirname+"/signin.html");
-                    //     console.log("Error")
-                    // }else{
-                    //     var uid=result[0].user_id;
-                    //     con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
-                    //         if(Object.keys(res).length>0){
-                    //             con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
-                    //             });
-                    //         }else{
-                    //             con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
-                                    
-                    //             });
-                    //         }
-                    //     });
-                        con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
-                            // console.log(results[0]['rate']);
-                            const json = JSON.stringify(results[0]);
-                            if (err) {
-                                console.error('Error', err);
-                                res.status(500).send('Error');
-                                return;
-                            }
-                        });
-                        if(results.length > 0){
-                            res.render('cart-en', {data:results[0]});
-                        } else 
-                        {
-                            res.render('cart-en', {data:[]})
-                        }
-                        
-                    
-                });
+        if (error){
+            res.redirect('/signin-en');
+        }else{
+            var uid=result[0].user_id;
+            con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+                if(Object.keys(res).length>0){
+                    con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+                    });
+                }else{
+                    con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
+                    });
+                }
+                console.log("done");
+            });
+        }
+            /*con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
+                // console.log(results[0]['rate']);
+                const json = JSON.stringify(results[0]);
+                if (err) {
+                    console.error('Error', err);
+                    res.status(500).send('Error');
+                    return;
+                }
+            });
+            if(results.length > 0){
+                res.render('cart', {data:results[0]});
+            } else
+            {
+                res.render('cart', {data:[]})
+            }*/
+            res.redirect("shop-en")
+    });
+    
+} else {
+    res.redirect('/signin-en');
+}
    
-   
+});
+
+app.get("/get-cart-en", function(req, res) {
+    const eml=req.session.user;
+    const productId = req.body.value;
+  console.log(productId);
+    if(req.session.user) {
+        con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+            var uid=result[0].user_id;
+        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}';`,function(err,rows){
+            if(err){
+                  console.error('Error fetching data from MySQL:',err);
+                  res.status(500).send('Error fetching data from MySQL');
+                  return;
+                }
+                    res.render('cart-en',{sgdata: "Log out", data1:rows});
+           
+        });
+       });
+    } else {
+        res.redirect('/signin-en');
+    }
 });
 
 app.get("/failReg-en", function(req, res) {
@@ -183,6 +205,18 @@ app.get("/list-prod-en", function (req, res) {
     } else {
         res.redirect("/signin-en")
     }
+});
+
+app.get("/remove/:id", function(req, res){
+    const id=req.params.id;
+    con.query(`DELETE FROM orders WHERE item_id = ${id};`, function(err) {
+        if(err){
+            console.error('Error fetching data from MySQL:',err);
+            res.status(500).send('Error fetching data from MySQL');
+            return;
+          }
+              res.redirect('/get-cart-en');
+    });
 });
 
 app.get("/checkout-en",(req,res)=>{
@@ -364,50 +398,89 @@ app.post("/login-en",encodeUrl,(req,res)=>{
     });
 });
 
+app.post("/search-en", function(req, res){
+    const searchText = req.body.searchText;
+    if(searchText === "")
+    {
+        res.redirect("/shop-en");
+    } else{
+        con.query(`SELECT * FROM stock WHERE item_name = '${searchText}'`,function(err,rows){
+            if (err) {
+                  console.error('Error fetching data from MySQL:', err);
+                  res.status(500).send('Error fetching data from MySQL');
+                  return;
+                }
+            if(req.session.user){
+                res.render('shop-en',{sgdata:"Log out", productId: -1, data:rows});
+            } else {
+                res.render('shop-en',{sgdata:"Sign In", productId: -1, data:rows});
+            }
+            
+        });
+    }
+   
+});
+
 // Add an item to the cart
 app.post('/add', (req, res) => {
     const productId = req.body.value;
     console.log(productId);
     // Find the product in your database based on the productId
     cartItems.push(productId);
+    console.log(cartItems);
+    console.log("added");
+    // alert("added");
+
+    con.query('SELECT * FROM stock',function(err,rows){
+        if (err) {
+              console.error('Error fetching data from MySQL:', err);
+              res.status(500).send('Error fetching data from MySQL');
+              return;
+            }
+        if(req.session.user){
+            res.render('shop-en',{productId: cartItems[cartItems.length - 1], sgdata:"Log out", data:rows});
+        } else {
+            res.render('shop-en',{productId: cartItems[cartItems.length - 1], sgdata:"Sign In", data:rows});
+        }
+    });
     
-    con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
-      // console.log(results[0]['rate']);
-      const json = JSON.stringify(results[0]);
-      if (err) {
-          console.error('Error', err);
-          res.status(500).send('Error');
-          return;app.get('/register', function(req, res) {
-            res.sendFile(__dirname + '/public/register.html');
-        });
-      }
+//     con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
+//       // console.log(results[0]['rate']);
+//       const json = JSON.stringify(results[0]);
+//       if (err) {
+//           console.error('Error', err);
+//           res.status(500).send('Error');
+//           return;app.get('/register', function(req, res) {
+//             res.sendFile(__dirname + '/public/register.html');
+//         });
+//       }
   
-      // const eml=req.session.user;
-      // con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
-      //                 if (error){
-      //                     // res.sendFile(__dirname+"/signin.html");
-      //                     console.error('Error', err);
-      //     res.status(500).send('Error');
-      //     return;
-      //                 }else{
-      //                     var uid=result[0].user_id;
-      //                     con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
-      //                         if(Object.keys(res).length>0){
-      //                             con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
-      //                                 console.log("Success");
-      //                             });
-      //                         }else{
-      //                             con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
-      //                                 console.log("Success");
-      //                             });
-      //                         }
-      //                     });
+//       // const eml=req.session.user;
+//       // con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+//       //                 if (error){
+//       //                     // res.sendFile(__dirname+"/signin.html");
+//       //                     console.error('Error', err);
+//       //     res.status(500).send('Error');
+//       //     return;
+//       //                 }else{
+//       //                     var uid=result[0].user_id;
+//       //                     con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+//       //                         if(Object.keys(res).length>0){
+//       //                             con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+//       //                                 console.log("Success");
+//       //                             });
+//       //                         }else{
+//       //                             con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
+//       //                                 console.log("Success");
+//       //                             });
+//       //                         }
+//       //                     });
                          
-      //                 };
+//       //                 };
                       
-      //             });
-      res.render('cart-en', {data:results[0]});
-  });
+//       //             });
+//       res.render('cart-en', {data:results[0]});
+//   });
   //   const product = { id: results[0]['item_id', name: results[0]['item_name'], price: results[0]['rate'], quantity: results[0]['unit_av'] };
   
     // Add the product to the cart
@@ -475,7 +548,7 @@ app.get("/shop-kn",(req,res)=>{
               res.status(500).send('Error fetching data from MySQL');
               return;
             }
-        res.render('shop-kn',{data:rows});
+        res.render('shop-kn',{productId: -1, data:rows});
     });
     //res.sendFile(__dirname+"/shop.ejs");
 });
@@ -507,6 +580,74 @@ app.get("/profile-kn", function (req, res){
     
 });
 
+app.get("/add-cart-kn",(req,res)=>{
+
+    const itemid=req.query.value;
+    const eml=req.session.user;
+    const productId = req.body.value;
+  console.log(productId);
+  // Find the product in your database based on the productId
+  if(req.session.user){
+    con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+        if (error){
+            res.redirect('/signin-en');
+        }else{
+            var uid=result[0].user_id;
+            con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+                if(Object.keys(res).length>0){
+                    con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+                    });
+                }else{
+                    con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
+                    });
+                }
+                console.log("done");
+            });
+        }
+            /*con.query(`SELECT * FROM stock WHERE item_id=${productId}`, (err, results) => {
+                // console.log(results[0]['rate']);
+                const json = JSON.stringify(results[0]);
+                if (err) {
+                    console.error('Error', err);
+                    res.status(500).send('Error');
+                    return;
+                }
+            });
+            if(results.length > 0){
+                res.render('cart', {data:results[0]});
+            } else
+            {
+                res.render('cart', {data:[]})
+            }*/
+            res.redirect("shop-kn")
+    });
+    
+} else {
+    res.redirect('/signin-en');
+    }
+});
+
+app.get("/get-cart-kn", function(req, res) {
+    const eml=req.session.user;
+    const productId = req.body.value;
+  console.log(productId);
+    if(req.session.user) {
+        con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+            var uid=result[0].user_id;
+        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}';`,function(err,rows){
+            if(err){
+                  console.error('Error fetching data from MySQL:',err);
+                  res.status(500).send('Error fetching data from MySQL');
+                  return;
+                }
+                    res.render('cart-kn',{sgdata: "Log out", data1:rows});
+           
+        });
+       });
+    } else {
+        res.redirect('/signin-kn');
+    }
+});
 
 
 app.get("/cart-kn",(req,res)=>{
@@ -556,12 +697,13 @@ app.get("/failReg-kn", function(req, res) {
 app.get("/list-prod-kn", function (req, res) {
     if(req.session.user){
         if(req.session.user.category === 1){
-        res.sendFile(__dirname + "/public/kn/listProducts-kn.html");
+        res.render('listProducts-kn');
         }
     } else {
         res.redirect("/signin-kn")
     }
 });
+
 
 app.get("/checkout-kn",(req,res)=>{
     if(req.session.user){
@@ -582,7 +724,7 @@ app.get('/logout-kn',  function (req, res, next)  {
         }
       });
     }
-  });
+});
 
 
 
@@ -630,7 +772,7 @@ app.post('/register-kn',encodeUrl,(req,res)=>{
                     password:password 
                 };
 
-                res.sendFile(// <!DOCTYPE html>
+                res.render(// <!DOCTYPE html>
                 // <html lang="en">
                 // <head>
                 //     <title>Login and register form with Node.js, Express.js and MySQL</title>
@@ -645,7 +787,7 @@ app.post('/register-kn',encodeUrl,(req,res)=>{
                 //     </div>
                 // </body>
                 // </html>
-                __dirname + '/public/kn/profile-edit-kn.html');
+                'profile-edit-kn');
             }
                 // inserting new user data
                 var sql=`INSERT INTO users(user_email,user_pass,category) VALUES('${email}','${password.toString('hex')}',${category})`;
@@ -733,7 +875,7 @@ app.post("/login-kn",encodeUrl,(req,res)=>{
             tryCount++;
             console.log(tryCount);
             if (tryCount >= 3) {
-            res.sendFile(__dirname+'/public/kn/failReg-kn.html');
+            res.render('failReg-kn');
             tryCount = 0;
             } else {
                 res.redirect("/signin-kn");
@@ -797,54 +939,11 @@ app.post('/add', (req, res) => {
 
 // end
 
-app.get('/account', function(req, res) {
-    res.sendFile(__dirname + '/public/farmer-account.html');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.get("/test", function (req, res) {
-    res.sendFile(__dirname + "/public/test.html");
-});
-
-
-
-
-
-
-app.get("/contact",(req,res)=>{
-    res.sendFile(__dirname+"/public/contact-us.html");
-});
 
 
 app.use(express.static(__dirname));
 
 // app.set('views',__dirname);
-
-
 
 
 app.get("/shop/:id",(req,res)=>{
@@ -857,10 +956,6 @@ app.get("/shop/:id",(req,res)=>{
     res.send(imageData);
   });
 });
-
-
-
-
 
 
 

@@ -66,7 +66,7 @@
         <div class="attr-nav">
           <ul>
             <li class="side-menu">
-              <a href="/cart-en">
+              <a href="/get-cart-en">
                 <i class="fa fa-shopping-bag"></i>
                 <span class="badge">3</span>
                 <p class="active">My Cart</p>
@@ -76,11 +76,12 @@
               <% if(sgdata === "Log out") { %>
               <a href="/logout-en" id="sign-in"><%= sgdata %></a>
               <% } else { %>
-              <a href="/signin-en" id="sign-in">Sign in</a>
+              <a href="/signin-en" id="sign-in"><%= sgdata %></a>
               <% } %>
             </li>
             <li>
-              <a href="/cart-kn">ಕನ್ನಡ ದಲ್ಲಿ ನೋಡಿ</a>
+            <li>
+              <a href="/get-cart-kn">ಕನ್ನಡ ದಲ್ಲಿ ನೋಡಿ</a>
             </li>
         </div>
         </ul>
@@ -138,30 +139,37 @@
                 </tr>
               </thead>
               <tbody>
+                <% if(data1.length){
+                for(var i = 0; i< data1.length; i++) {%>
                 <tr>
                   <td class="thumbnail-img">
                     <a href="#">
-                      <img src="/shop/<%= data.item_id %>" class="img-fluid" alt="Image">
+                      <img src="/shop/<%= data1[i].item_id %>" class="img-fluid" alt="Image">
                     </a>
                   </td>
                   <td class="name-pr">
                     <a class="remove">
-                      <%= data.item_name %>
+                      <%= data1[i].item_name %>
                     </a>
                   </td>
                   <td class="price-pr">
-                    <p class="remove"><%= data.rate %></p>
+                    <p class="remove">₹ <%= data1[i].rate %></p>
                   </td>
-                  <td class="quantity-box"><input type="number" size="4" value="1" min="0" step="1" class="c-input-text qty text"></td>
+                  <td class="price-pr">
+                    <p class="remove"><%= data1[i].units %> Kg</p>
+                  </td>
+                  <!-- <td class="quantity-box"><input type="number" size="4" value="<%= data1[i].units %>" min="0" step="1" class="c-input-text qty text"></td> -->
                   <td class="total-pr">
-                    <p class="remove"></p>
+                    <p class="remove">₹ <%= data1[i].rate * data1[i].units %></p>
                   </td>
                   <td class="remove-pr">
-                    <a href="#" onclick="remove()">
+                    <a href="/remove/<%= data1[i].item_id %>">
                       <i class="fas fa-times"></i>
                     </a>
                   </td>
                 </tr>
+                <% }      
+                }%>
               </tbody>
             </table>
           </div>
@@ -174,6 +182,19 @@
           </div>
         </div>
       </div>
+      <% let subtotal = 0; %>
+      <% let tax = 0; %>
+      <% let discount = 0; %>
+      <% let Cdiscount = 0; %>
+      <% let total = 0; %>
+      <% data1.forEach(item => {
+        subtotal += (item.units * item.rate);
+        console.log(item)
+      }); %>
+      <% discount = (2 * subtotal / 100); %>
+      <% Cdiscount = (1 * subtotal / 100); %>
+      <% tax = (9 * subtotal / 100); %>
+      <% total = Math.round(subtotal - discount - Cdiscount + tax) %>
 
       <div class="row my-3">
         <div class="col-lg-12 col-sm-12"></div>
@@ -182,39 +203,37 @@
             <h3>Order summary</h3>
             <div class="d-flex">
               <h4>Sub Total</h4>
-              <div class="ml-auto font-weight-bold"> ₹ 130 </div>
+              <div class="ml-auto font-weight-bold"> ₹ <%= subtotal %></div>
             </div>
             <div class="d-flex">
               <h4>Discount</h4>
-              <div class="ml-auto font-weight-bold"> ₹ 40 </div>
+              <div class="ml-auto font-weight-bold"> ₹ <%= discount %></div>
             </div>
             <hr class="my-1">
             <div class="d-flex">
               <h4>Coupon Discount</h4>
-              <div class="ml-auto font-weight-bold"> ₹ 10 </div>
+              <div class="ml-auto font-weight-bold"> ₹ <%= Cdiscount %></div>
             </div>
             <div class="d-flex">
               <h4>Tax</h4>
-              <div class="ml-auto font-weight-bold"> ₹ 2 </div>
-            </div>
-            <div class="d-flex">
-              <h4>Shipping Cost</h4>
-              <div class="ml-auto font-weight-bold"> Free </div>
+              <div class="ml-auto font-weight-bold"> ₹ <%= tax %></div>
             </div>
             <hr>
             <div class="d-flex gr-total">
-              <h5>Grand Total</h5>
-              <div class="ml-auto h5"> ₹ 388 </div>
+              <h5>Total</h5>
+              <div class="ml-auto h5"> ₹ <%= total %></div>
             </div>
             <hr>
           </div>
         </div>
-        <div class="col-lg-12 d-flex shopping-box"><a href="/checkout" class="ml-auto btn hvr-hover">Checkout</a> </div>
+        <div class="col-lg-12 d-flex shopping-box"><a href="/checkout-en" class="ml-auto btn hvr-hover">Checkout</a> </div>
       </div>
       <br>
       <br>
     </div>
   </div>
+  <br>
+  <br>
   <!-- End Cart -->
 
 
