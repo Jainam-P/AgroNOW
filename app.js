@@ -84,9 +84,9 @@ app.get("/farmer-account-en",(req,res)=>{
 });
 
 app.get("/signin-en",(req,res)=>{
-    if(!(req.session.user)){
+    // if(!(req.session.user)){
         res.render('signin-en');
-    }
+    // }
 });
 
 app.get("/shop-en",(req,res)=>{
@@ -107,7 +107,7 @@ app.get("/shop-en",(req,res)=>{
 });
 
 app.get('/register-en', function(req, res) {
-    res.sendFile(__dirname + '/public/en/register-en.html');
+    res.render('register-en');
 });
 
 app.get("/profile-en", function (req, res){
@@ -350,7 +350,7 @@ app.post('/register-en',encodeUrl,(req,res)=>{
                     password:password 
                 };
 
-                res.sendFile(// <!DOCTYPE html>
+                res.render(// <!DOCTYPE html>
                 // <html lang="en">
                 // <head>
                 //     <title>Login and register form with Node.js, Express.js and MySQL</title>
@@ -365,7 +365,7 @@ app.post('/register-en',encodeUrl,(req,res)=>{
                 //     </div>
                 // </body>
                 // </html>
-                __dirname + '/public/en/profile-edit-en.html');
+                'profile-edit-en');
             }
                 // inserting new user data
                 var sql=`INSERT INTO users(user_email,user_pass,category) VALUES('${email}','${password.toString('hex')}',${category})`;
@@ -402,11 +402,11 @@ app.post('/register/profile-en',encodeUrl,(req,res)=>{
         con.query(sql,function(err,result){
             if (err){
                 console.log(err);
-            } else {
-                console.log(result);
-            }
+            } 
+            res.redirect("/signin-en");
+           
         });
-        res.redirect("/signin-en");
+       
     });
 });
 
@@ -453,7 +453,7 @@ app.post("/login-en",encodeUrl,(req,res)=>{
             tryCount++;
             console.log(tryCount);
             if (tryCount >= 3) {
-            res.sendFile(__dirname+'/public/en/failReg-en.html');
+            res.redirect('/failReg-en');
             tryCount = 0;
             } else {
                 res.redirect("/signin-en");
