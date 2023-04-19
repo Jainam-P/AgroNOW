@@ -5,6 +5,10 @@ const http=require('http');
 var parseUrl=require('body-parser');
 const app=express();
 const ejs=require('ejs');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 app.use(express.static("public"));
 const translate = require('google-translate-api');
 const targetLanguage = 'en';
@@ -136,9 +140,9 @@ app.get("/add-cart-en",(req,res)=>{
             res.redirect('/signin-en');
         }else{
             var uid=result[0].user_id;
-            con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}'`,function(erro,res){
+            con.query(`select * from orders where user_id='${uid}' and item_id='${itemid}' and status=0`,function(erro,res){
                 if(Object.keys(res).length>0){
-                    con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}'`,function(err,res){
+                    con.query(`UPDATE orders SET units=units+1 WHERE user_id='${uid}' and item_id='${itemid}' and status=0`,function(err,res){
                     });
                 }else{
                     con.query(`INSERT INTO orders(DOO,DOD,user_id,item_id,units,status) VALUES(curdate(),curdate()+1,${uid},${itemid},1,0)`,function(err,res){
@@ -174,17 +178,19 @@ app.get("/add-cart-en",(req,res)=>{
 app.get("/get-cart-en", function(req, res) {
     const eml=req.session.user;
     const productId = req.body.value;
+   
   console.log(productId);
     if(req.session.user) {
         con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
             var uid=result[0].user_id;
-        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}';`,function(err,rows){
+        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units,orders.status FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}' and merge.status=${0};`,function(err,rows){
             if(err){
                   console.error('Error fetching data from MySQL:',err);
                   res.status(500).send('Error fetching data from MySQL');
                   return;
                 }
-                    res.render('cart-en',{sgdata: "Log out", data1:rows});
+           
+                res.render('cart-en',{sgdata: "Log out", data1:rows});
            
         });
        });
@@ -201,7 +207,8 @@ app.get("/failReg-en", function(req, res) {
 app.get("/list-prod-en", function (req, res) {
     if(req.session.user){
         if(req.session.user.category === 1){
-        res.sendFile(__dirname + "/public/en/listProducts-en.html");
+            res.render('listProducts-en',{data2:req.session.user.username});
+        // res.sendFile(__dirname + "/public/listProducts.html");
         }
     } else {
         res.redirect("/signin-en")
@@ -226,7 +233,7 @@ app.get("/checkout-en",(req,res)=>{
     if(req.session.user) {
         con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
             var uid=result[0].user_id;
-        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}';`,function(err,rows){
+        con.query(`select * from (SELECT orders.user_id,orders.item_id,stock.item_name,stock.rate,orders.units,orders.status FROM orders inner JOIN stock ON orders.item_id=stock.item_id) as merge where merge.user_id='${uid}' and merge.status=${0};`,function(err,rows){
             if(err){
                   console.error('Error fetching data from MySQL:',err);
                   res.status(500).send('Error fetching data from MySQL');
@@ -241,11 +248,33 @@ app.get("/checkout-en",(req,res)=>{
     }
 });
 
+app.get("/place-order-en", function(req, res){
+    const eml = req.session.user;
+    console.log(eml.user_id);
+    if(eml){
+        con.query(`select user_id from userprofile where user_email='${eml.username}'`,function(error,result){
+            var uid=result[0].user_id;
+            con.query(`UPDATE orders SET status = ${1} WHERE user_id = ${uid};`, function(err,rows){
+                if(err){
+                    console.error('Error updating data in MySQL:',err);
+                    res.status(500).send('Error updated data in MySQL');
+                    return;
+            }
+        });
+
+        res.redirect("/orders-en");
+
+    });
+    } else {
+        res.redirect("/signin-en");
+    }
+});
+
 app.get("/orders-en",(req,res)=>{
     const eml = req.session.user;
 
     if(eml){
-        tempquery = `SELECT * FROM orders, userprofile where orders.user_id = userprofile.user_id and userprofile.user_email = '${eml.username}';`
+        tempquery = `SELECT * FROM orders, userprofile where orders.user_id = userprofile.user_id and userprofile.user_email= '${eml.username}' and orders.status=${1};`
         con.query(tempquery,function(err,rows){
         if (err) {
               console.error('Error fetching data from MySQL:', err);
@@ -260,6 +289,8 @@ app.get("/orders-en",(req,res)=>{
     
     //res.sendFile(__dirname+"/shop.ejs");
 });
+
+
 
 
 app.get('/logout-en',  function (req, res, next)  {
@@ -524,6 +555,46 @@ app.post('/add', (req, res) => {
   //   res.json(cartItems);
   // res.redirect("/cart");
   });
+
+  app.post('/addProduct',encodeUrl,upload.single('inputFile'),(req,res)=>{
+    var hash=crypto.createHash('sha256');
+    var productName = req.body.productName;
+    var Weight = req.body.Weight;
+    var rate = req.body.rate;
+    var date = req.body.expDate;
+    date.replaceAll("/","-");
+    var data = fs.readFileSync(req.file.path);
+    var pass = req.body.enterpass;
+    pass=hash.update(pass);
+    pass=hash.digest(pass);
+
+    con.connect(function(err) {
+        if (err){
+            console.log(err);
+        };
+        // inserting new user data
+        con.query(`SELECT user_id FROM userprofile WHERE user_email=(SELECT user_email FROM users WHERE user_email='${req.session.user.username}' AND user_pass='${pass.toString('hex')}')`,function(er,resu){
+            if(er){
+                console.log(er);
+            } else {
+                if(Object.keys(resu).length>0){
+                        var sql=`INSERT INTO stock(item_name,img,rate,unit_av,DOM,DOE,user_id) VALUES('${productName}',?,${rate},${Weight},curdate(),'${date}','${resu[0].user_id}')`;
+                        console.log(sql);
+                        con.query(sql,[data],function(error,result1){
+                            if (error){
+                                console.log(error);
+                            } else {
+                                res.redirect("/shop-en");
+                            }
+                        });
+                }else{
+                    res.redirect("/signin-en");
+                }
+            }
+        });
+       
+    });
+});
   
 
 // end

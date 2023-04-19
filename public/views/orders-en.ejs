@@ -16,8 +16,8 @@
   <meta name="author" content="">
 
   <!-- Site Icons -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/images/pragati-mahila-samaste-high-resolution-logo-color-on-transparent-background.png" type="image/x-icon">
+  <link rel="apple-touch-icon" href="assets/images/pragati-mahila-samaste-high-resolution-logo-color-on-transparent-background.png">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -92,31 +92,36 @@
   </header>
   <!-- End Main Top -->
   <br>
-  <h1>&nbsp Your orders: </h1>
+  <h1 style="text-align: center;">Your orders: </h1>
   <br>
   <% if(data.length){ for(var i=0; i< data.length; i++) {%>
-  <ul class="list-group list-group-horizontal">
+  <ul class="list-group list-group-horizontal" style="text-align: center;">
     <li class="list-group-item">
-      <% data.order_id %>
+      Order ID: <%= data[i].order_id %>
     </li>
     <li class="list-group-item">
-      <% data.DOD %>
+      DOD: <%= data[i].DOD %>
     </li>
     <li class="list-group-item">
-      <% data.DOO %>
+      DOE: <%= data[i].DOO %>
     </li>
     <li class="list-group-item">
-      <% data.item_id %>
+      Item ID: <%= data[i].item_id %>
     </li>
     <li class="list-group-item">
-      <% data.units %>
+      Units: <%= data[i].units %>
     </li>
-    <li class="list-group-item">
-      <% data.status %>
+    <% if(data[i].status === 1) { %>
+    <li class="list-group-item"> Status: Completed </li>
+    <% } else { %>
+    <li class="list-group-item"> Status: Incomplete </li>
+    <% } %>
     </li>
   </ul>
-  <% }} %>
-  <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+  <br>
+  <br>
+  <% }
+  } %>
 
   <!-- ALL JS FILES -->
   <script src="assets/js/jquery-3.2.1.min.js"></script>
