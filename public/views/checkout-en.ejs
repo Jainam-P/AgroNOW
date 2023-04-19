@@ -54,9 +54,9 @@
         <div class="collapse navbar-collapse" id="navbar-menu">
           <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about-en">About Us</a></li>
             <li class="dropdown">
-              <a href="/shop" class="nav-link dropdown-toggle arrow active">SHOP</a>
+              <a href="/shop-en" class="nav-link dropdown-toggle arrow active">SHOP</a>
             </li>
           </ul>
         </div>
@@ -130,15 +130,19 @@
                 <h3>Shopping cart</h3>
               </div>
               <% if(data2.length){
-                for(var i = 0; i< data2.length; i++) {%>
+                 let subtotal = 0 %>
+              <% for(var i = 0; i< data2.length; i++) {
+                    console.lo
+                    subtotal += (data2[i].units * data2[i].rate); %>
               <div class="rounded p-2 bg-light">
                 <div class="media mb-2 border-bottom">
                   <div class="media-body">
                     <a href="#"><%= data2[i].item_name %></a>
-                    <div class="small text-muted">Price: ₹<%= data2[i].rate %> <span class="mx-2">|</span> Qty: <%= data2[i].unit_av %> <span class="mx-2">|</span> Subtotal: ₹0</div>
+                    <div class="small text-muted">Price: ₹<%= data2[i].rate %> <span class="mx-2">|</span> Qty: <%= data2[i].units %> <span class="mx-2">|</span> Subtotal: ₹ <%= subtotal %></div>
                   </div>
                 </div>
               </div>
+              <% subtotal = 0 %>
               <%}
               }%>
             </div>
