@@ -290,7 +290,26 @@ app.get("/orders-en",(req,res)=>{
     //res.sendFile(__dirname+"/shop.ejs");
 });
 
+app.get("/products-en",(req,res)=>{
+    const eml = req.session.user;
 
+    if(eml){
+        
+        tempquery = `SELECT * FROM stock where user_id=(SELECT user_id FROM userprofile WHERE user_email='${eml.username}');`
+        con.query(tempquery,function(err,rows){
+        if (err) {
+              console.error('Error fetching data from MySQL:', err);
+              res.status(500).send('Error fetching data from MySQL');
+              return;
+            }
+        res.render('products-en',{sgdata:"Log out", data:rows});
+    });
+    } else {
+        res.redirect("/signin-en");
+    }
+    
+    //res.sendFile(__dirname+"/shop.ejs");
+});
 
 
 app.get('/logout-en',  function (req, res, next)  {
